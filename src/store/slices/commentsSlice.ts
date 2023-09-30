@@ -1,18 +1,23 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {add} from "date-fns";
 import getAuthorsRequest from "src/api/authors/getAuthorsRequest";
 import getCommentsRequest from "src/api/comments/getCommentsRequest";
 import {IComment, IPagination} from "src/types/commentsTypes";
 interface ICommentSlice {
-    comments: IPagination<any[]> | null;
+    comments: any[] | [];
     commentsLoadingStatus: "idle" | "loading" | "error";
     authors: any;
     authorsLoadingStatus: "idle" | "loading" | "error";
+    general: {commentsCount: number; likesCount: number} | null;
+    generalLoadingStatus: "idle" | "loading" | "error";
 }
 const initialState: ICommentSlice = {
-    comments: null,
+    comments: [],
     commentsLoadingStatus: "loading",
     authors: null,
     authorsLoadingStatus: "loading",
+    general: null,
+    generalLoadingStatus: "loading",
 };
 interface Props {
     page: number;
@@ -21,7 +26,6 @@ export const fetchComments = createAsyncThunk(
     "comments/fetchComments",
     async ({page}: Props) => {
         const comments = await getCommentsRequest(page);
-        console.log(comments.data[0].text);
         return comments;
     },
 );
@@ -33,12 +37,36 @@ export const fetchAuthors = createAsyncThunk(
     },
 );
 
+export const fetchGeneral = createAsyncThunk(
+    "comments/fetchGeneral",
+    async () => {
+        let pages = 0; // Инициализируйте переменную для хранения количества страниц
+        const general: any = {commentsCount: 0, likesCount: 0}; // Добавляем likesCount
+
+        // Получаем данные первой страницы для получения total_pages
+        const firstPage = await getCommentsRequest(1);
+        pages = firstPage.pagination.total_pages;
+
+        // Обходим остальные страницы и суммируем длину комментариев и лайки
+        for (let i = 1; i <= pages; i++) {
+            const comments = await getCommentsRequest(i); // Получаем комментарии для текущей страницы
+            general.commentsCount += comments.data.length; // Добавляем длину комментариев текущей страницы к общей сумме
+
+            // Суммируем лайки
+            comments.data.forEach((comment: any) => {
+                general.likesCount += comment.likes;
+            });
+        }
+        return general;
+    },
+);
+
 const commentsSlice = createSlice({
     name: "comments",
     initialState,
     reducers: {
-        setComments: (state, action: PayloadAction<IPagination<any[]>>) => {
-            state.comments = action.payload;
+        setLikes: (state, action: PayloadAction<number>) => {
+            state.general!.likesCount = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -46,10 +74,13 @@ const commentsSlice = createSlice({
             .addCase(fetchComments.pending, (state) => {
                 state.commentsLoadingStatus = "loading";
             })
-            .addCase(fetchComments.fulfilled, (state, action) => {
-                state.commentsLoadingStatus = "idle";
-                state.comments = action.payload;
-            })
+            .addCase(
+                fetchComments.fulfilled,
+                (state, action: PayloadAction<{data: any[]}>) => {
+                    state.commentsLoadingStatus = "idle";
+                    state.comments = action.payload.data;
+                },
+            )
             .addCase(fetchComments.rejected, (state) => {
                 state.commentsLoadingStatus = "error";
             })
@@ -63,6 +94,16 @@ const commentsSlice = createSlice({
             .addCase(fetchAuthors.rejected, (state) => {
                 state.authorsLoadingStatus = "error";
             })
+            .addCase(fetchGeneral.pending, (state) => {
+                state.generalLoadingStatus = "loading";
+            })
+            .addCase(fetchGeneral.fulfilled, (state, action) => {
+                state.generalLoadingStatus = "idle";
+                state.general = action.payload;
+            })
+            .addCase(fetchGeneral.rejected, (state) => {
+                state.generalLoadingStatus = "error";
+            })
             .addDefaultCase(() => {});
     },
 });
@@ -70,4 +111,4 @@ const commentsSlice = createSlice({
 const {actions, reducer} = commentsSlice;
 
 export default reducer;
-export const {setComments} = actions;
+export const {setLikes} = actions;

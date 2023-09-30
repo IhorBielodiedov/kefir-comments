@@ -12,8 +12,7 @@ import img10 from "src/assets/avatars/chew.jpeg";
 const authors: any[] = [
     {
         id: 1,
-        // name: "Obi-Wan Kenobi",
-        name: "timo_shka",
+        name: "Obi-Wan Kenobi",
         avatar: img1,
     },
     {

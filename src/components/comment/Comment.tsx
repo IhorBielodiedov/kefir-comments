@@ -1,10 +1,12 @@
 import React, {FC, useEffect, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "src/store";
 import {IComment} from "src/types/commentsTypes";
 import "./comment.css";
 import {formatDate} from "src/lib/date";
 import Heart from "../../assets/icons/heart.svg";
+import HeartFilled from "../../assets/icons/heartFilled.svg";
+import {setLikes} from "src/store/slices/commentsSlice";
 
 interface Props {
     comment: IComment;
@@ -12,9 +14,26 @@ interface Props {
 }
 
 export const Comment: FC<Props> = ({comment, level}) => {
-    const {authors} = useSelector((state: RootState) => state.commentsSlice);
+    const {authors, general} = useSelector(
+        (state: RootState) => state.commentsSlice,
+    );
     const marginLeft = `${level * 34}px`;
     const [authorInfo, setAuthorInfo] = useState<any>();
+    const [isLiked, setIsLiked] = useState<boolean>();
+    const [commentLikesCount, setCommentLikesCount] = useState(comment.likes);
+    const dispatch = useDispatch();
+
+    const handleLikeClick = () => {
+        if (isLiked) {
+            dispatch(setLikes(general!.likesCount - 1));
+            setCommentLikesCount((state) => state - 1);
+            setIsLiked(false);
+        } else {
+            dispatch(setLikes(general!.likesCount + 1));
+            setCommentLikesCount((state) => state + 1);
+            setIsLiked(true);
+        }
+    };
 
     useEffect(() => {
         if (authors)
@@ -44,10 +63,17 @@ export const Comment: FC<Props> = ({comment, level}) => {
                                         {formatDate(comment.created)}
                                     </p>
                                 </div>
-                                <button className="like-button">
-                                    <img src={Heart} alt="Heart" />
+                                <button
+                                    className="like-button"
+                                    onClick={handleLikeClick}
+                                >
+                                    {isLiked ? (
+                                        <img src={HeartFilled} alt="Heart" />
+                                    ) : (
+                                        <img src={Heart} alt="Heart" />
+                                    )}
                                     <p className="bold-text-nums">
-                                        {comment.likes}
+                                        {commentLikesCount}
                                     </p>
                                 </button>
                             </div>

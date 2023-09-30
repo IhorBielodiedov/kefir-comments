@@ -3,7 +3,7 @@ export interface IComment {
     author: number;
     text: string;
     parent: number | null;
-    likes: string;
+    likes: number;
     created: string;
     children: IComment[] | [];
 }
