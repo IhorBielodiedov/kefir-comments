@@ -7,16 +7,8 @@
     line-height: normal;
     margin-top: 16px;
     margin-bottom: 16px;
-    /* width: 100%; */
 }
 
-.comment:first-child {
-    margin-top: 0px;
-}
-
-.comment:last-child {
-    margin-bottom: 0;
-}
 .comment-container {
     display: flex;
     width: 100%;
