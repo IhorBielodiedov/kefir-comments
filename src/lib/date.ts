@@ -22,7 +22,7 @@ export function formatDate(dateString: string) {
 
         return formattedDistance;
     } else {
-        return format(date, "dd.MM.yyyy,HH:mm:ss");
+        return format(date, "dd.MM.yyyy, HH:mm:ss");
     }
 }
 
