@@ -28,17 +28,18 @@ export const ListWrapper = () => {
     }, [currentPage]);
 
     useEffect(() => {
-        if (comments.length > 0)
-            setTransformedComments(transformCommentsData(comments));
+        setTransformedComments(transformCommentsData(comments));
+        console.log(comments);
     }, [comments]);
-
+    console.log(transformComments);
     const handleButtonClick = () => {
         setCurrentPage((state) => state + 1);
     };
 
     return (
         <>
-            {general && transformComments && (
+            {/* general &&  */}
+            {transformComments && (
                 <div className="list-wrapper">
                     <CommentsHeader />
                     <div className="list-line"></div>

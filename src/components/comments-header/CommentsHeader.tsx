@@ -1,8 +1,9 @@
 import {FC, useEffect, useState} from "react";
-import Heart from "../../assets/icons/heartEmpty.svg";
+
 import "./commentsHeader.css";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "src/store";
+import {HeartEmpty} from "../../assets/icons/HeartEmpty";
 export const CommentsHeader: FC = () => {
     const {comments, general} = useSelector(
         (state: RootState) => state.commentsSlice,
@@ -16,7 +17,7 @@ export const CommentsHeader: FC = () => {
                         {general.commentsCount} комментариев
                     </p>
                     <div className="likes-info">
-                        <img src={Heart} alt="Heart" />
+                        <HeartEmpty />
                         <p className="bold-text-nums">{general.likesCount}</p>
                     </div>
                 </div>

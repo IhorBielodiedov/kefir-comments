@@ -78,7 +78,12 @@ const commentsSlice = createSlice({
                 fetchComments.fulfilled,
                 (state, action: PayloadAction<{data: any[]}>) => {
                     state.commentsLoadingStatus = "idle";
-                    state.comments = action.payload.data;
+                    if (state.comments.length > 0)
+                        state.comments = [
+                            ...state.comments,
+                            ...action.payload.data,
+                        ];
+                    else state.comments = action.payload.data;
                 },
             )
             .addCase(fetchComments.rejected, (state) => {

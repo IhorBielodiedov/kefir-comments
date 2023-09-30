@@ -4,9 +4,10 @@ import {RootState} from "src/store";
 import {IComment} from "src/types/commentsTypes";
 import "./comment.css";
 import {formatDate} from "src/lib/date";
-import Heart from "../../assets/icons/heart.svg";
-import HeartFilled from "../../assets/icons/heartFilled.svg";
+
 import {setLikes} from "src/store/slices/commentsSlice";
+import {Heart} from "src/assets/icons/Heart";
+import {HeartFilled} from "src/assets/icons/HeartFilled";
 
 interface Props {
     comment: IComment;
@@ -17,7 +18,8 @@ export const Comment: FC<Props> = ({comment, level}) => {
     const {authors, general} = useSelector(
         (state: RootState) => state.commentsSlice,
     );
-    const marginLeft = `${level * 34}px`;
+    const isMobile = window.screen.width < 600;
+    const marginLeft = `${level * (isMobile ? 20 : 34)}px`;
     const [authorInfo, setAuthorInfo] = useState<any>();
     const [isLiked, setIsLiked] = useState<boolean>();
     const [commentLikesCount, setCommentLikesCount] = useState(comment.likes);
@@ -67,11 +69,7 @@ export const Comment: FC<Props> = ({comment, level}) => {
                                     className="like-button"
                                     onClick={handleLikeClick}
                                 >
-                                    {isLiked ? (
-                                        <img src={HeartFilled} alt="Heart" />
-                                    ) : (
-                                        <img src={Heart} alt="Heart" />
-                                    )}
+                                    {isLiked ? <HeartFilled /> : <Heart />}
                                     <p className="bold-text-nums">
                                         {commentLikesCount}
                                     </p>
