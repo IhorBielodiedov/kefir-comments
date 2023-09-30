@@ -8,6 +8,7 @@ import {formatDate} from "src/lib/date";
 import {setLikes} from "src/store/slices/commentsSlice";
 import {Heart} from "src/assets/icons/Heart";
 import {HeartFilled} from "src/assets/icons/HeartFilled";
+import {getMargin} from "src/lib/helpers";
 
 interface Props {
     comment: IComment;
@@ -19,7 +20,7 @@ export const Comment: FC<Props> = ({comment, level}) => {
         (state: RootState) => state.commentsSlice,
     );
     const isMobile = window.screen.width < 600;
-    const marginLeft = `${level * (isMobile ? 20 : 34)}px`;
+    const marginLeft = getMargin(isMobile, level);
     const [authorInfo, setAuthorInfo] = useState<any>();
     const [isLiked, setIsLiked] = useState<boolean>();
     const [commentLikesCount, setCommentLikesCount] = useState(comment.likes);

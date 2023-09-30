@@ -19,3 +19,9 @@ export function transformCommentsData(data: IComment[]) {
     });
     return commentsTree;
 }
+export const getMargin = (isMobile: boolean, level: number) => {
+    if (isMobile) {
+        return level < 2 ? `${level * 20}px` : `20px`;
+    }
+    return `${level * 34}px`;
+};

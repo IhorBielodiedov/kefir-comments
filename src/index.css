@@ -59,3 +59,11 @@ code {
     font-weight: 700;
     line-height: 150%; /* 22.5px */
 }
+@media (max-width: 600px) {
+    .bold-text {
+        font-size: 14px;
+    }
+    .bold-text-nums {
+        font-size: 14px;
+    }
+}

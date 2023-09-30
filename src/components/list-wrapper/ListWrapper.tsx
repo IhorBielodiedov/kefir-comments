@@ -14,9 +14,8 @@ import {CommentsHeader} from "../comments-header/CommentsHeader";
 
 export const ListWrapper = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const {comments, general} = useSelector(
-        (state: RootState) => state.commentsSlice,
-    );
+    const {comments, general, generalLoadingStatus, commentsLoadingStatus} =
+        useSelector((state: RootState) => state.commentsSlice);
     const [transformComments, setTransformedComments] = useState<IComment[]>();
     const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -39,12 +38,15 @@ export const ListWrapper = () => {
     return (
         <>
             {/* general &&  */}
-            {transformComments && (
+            {general && transformComments && (
                 <div className="list-wrapper">
                     <CommentsHeader />
                     <div className="list-line"></div>
                     <CommentsList comments={transformComments} level={0} />
-                    {currentPage < 3 && (
+                    {commentsLoadingStatus === "loading" && (
+                        <p className="bold-text loader">Загружаем еще...</p>
+                    )}
+                    {currentPage < 3 && commentsLoadingStatus === "idle" && (
                         <button
                             className="page-button"
                             onClick={handleButtonClick}

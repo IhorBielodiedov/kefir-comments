@@ -45,10 +45,19 @@ button {
     background-color: #767676;
     margin-bottom: 16px;
 }
-
+.loader {
+    margin-top: 44px;
+    padding: 8px;
+}
 @media (max-width: 600px) {
     .list-wrapper {
         width: 100%;
-        padding: 52px 24px 64px 24px;
+        padding: 32px 24px 76px 24px;
+    }
+    .list-line {
+        margin-bottom: 12px;
+    }
+    .page-button {
+        margin-top: 28px;
     }
 }
