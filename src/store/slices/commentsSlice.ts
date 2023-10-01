@@ -1,29 +1,12 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import axios, {AxiosError} from "axios";
-import {add} from "date-fns";
 import getAuthorsRequest from "src/api/authors/getAuthorsRequest";
 import getCommentsRequest from "src/api/comments/getCommentsRequest";
-import {IComment, IPagination} from "src/types/commentsTypes";
-interface ICommentSlice {
-    comments: any[] | [];
-    commentsLoadingStatus: "idle" | "loading" | "error";
-    authors: any;
-    authorsLoadingStatus: "idle" | "loading" | "error";
-    general: {commentsCount: number; likesCount: number} | null;
-    generalLoadingStatus: "idle" | "loading" | "error";
-}
-const initialState: ICommentSlice = {
-    comments: [],
-    commentsLoadingStatus: "loading",
-    authors: null,
-    authorsLoadingStatus: "loading",
-    general: null,
-    generalLoadingStatus: "loading",
-};
+import {ICommentSlice} from "src/types/commentsTypes";
+
 interface Props {
     page: number;
 }
-
 type OriginalRequest =
     | (AxiosError["config"] & {
           _retry?: boolean;
@@ -41,31 +24,51 @@ axios.interceptors.response.use(
             const newRes = await axios.request(error.config);
             return newRes;
         } else {
-            return Promise.reject(error);
+            throw error;
         }
     },
 );
+const initialState: ICommentSlice = {
+    comments: [],
+    commentsLoadingStatus: "loading",
+    authors: null,
+    authorsLoadingStatus: "loading",
+    general: null,
+    generalLoadingStatus: "loading",
+};
 
 export const fetchComments = createAsyncThunk(
     "comments/fetchComments",
     async ({page}: Props) => {
-        const comments = await getCommentsRequest(page);
-        return comments;
+        try {
+            const comments = await getCommentsRequest(page);
+
+            return comments;
+        } catch (error) {
+            throw error;
+        }
     },
 );
 export const fetchAuthors = createAsyncThunk(
     "comments/fetchAuthors",
     async () => {
-        const comments = await getAuthorsRequest();
-        return comments;
+        try {
+            const comments = await getAuthorsRequest();
+            return comments;
+        } catch (error) {
+            throw error;
+        }
     },
 );
 
 export const fetchGeneral = createAsyncThunk(
     "comments/fetchGeneral",
     async () => {
-        let pages = 0; // Инициализируйте переменную для хранения количества страниц
-        const general: any = {commentsCount: 0, likesCount: 0}; // Добавляем likesCount
+        let pages = 0; // Переменная для хранения количества страниц
+        const general: {commentsCount: number; likesCount: number} = {
+            commentsCount: 0,
+            likesCount: 0,
+        };
 
         // Получаем данные первой страницы для получения total_pages
         const firstPage = await getCommentsRequest(1);
@@ -73,13 +76,19 @@ export const fetchGeneral = createAsyncThunk(
 
         // Обходим остальные страницы и суммируем длину комментариев и лайки
         for (let i = 1; i <= pages; i++) {
-            const comments = await getCommentsRequest(i); // Получаем комментарии для текущей страницы
-            general.commentsCount += comments.data.length; // Добавляем длину комментариев текущей страницы к общей сумме
+            try {
+                const comments = await getCommentsRequest(i);
+                console.log(comments);
+                // Получаем комментарии для текущей страницы
+                general.commentsCount += comments.data.length; // Добавляем длину комментариев текущей страницы к общей сумме
 
-            // Суммируем лайки
-            comments.data.forEach((comment: any) => {
-                general.likesCount += comment.likes;
-            });
+                // Суммируем лайки
+                comments.data.forEach((comment: any) => {
+                    general.likesCount += comment.likes;
+                });
+            } catch (error) {
+                throw error;
+            }
         }
         return general;
     },

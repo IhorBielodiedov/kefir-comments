@@ -1,5 +1,4 @@
-import {formatDistanceToNow, format, formatDistance} from "date-fns";
-import {ru} from "date-fns/locale";
+import {format} from "date-fns";
 
 export function subtractHours(date: Date, numOfHours: number) {
     const dateCopy = new Date(date.getTime());

@@ -1,23 +1,24 @@
-import React, {FC, useEffect, useState} from "react";
+import {FC} from "react";
 import {Comment} from "../comment/Comment";
-import {transformCommentsData} from "src/lib/helpers";
-import {IComment, IPagination} from "src/types/commentsTypes";
+import {IComment} from "src/types/commentsTypes";
 import "./commentList.css";
 
 interface Props {
-    comments: IComment[];
-    level: number;
+    comments: IComment[]; // Массив комментариев, которые будут отображаться
+    level: number; // Уровень вложенности текущего списка комментариев
 }
 
 export const CommentsList: FC<Props> = ({comments, level}) => {
-    const renderComments = (comments: any) => {
-        return comments.map((comment: any) => (
+    // Функция для рекурсивного отображения комментариев и их подкомментариев
+    const renderComments = (comments: IComment[]) => {
+        return comments.map((comment: IComment) => (
             <div key={comment.id}>
                 <Comment comment={comment} level={level} />
+                {/* Отображение компонента Comment для каждого комментария */}
                 {comment.children && comment.children.length > 0 && (
                     <CommentsList
-                        comments={comment.children}
-                        level={level + 1}
+                        comments={comment.children} // Рекурсивный вызов CommentsList для подкомментариев
+                        level={level + 1} // Увеличение уровня вложенности
                     />
                 )}
             </div>
@@ -32,5 +33,3 @@ export const CommentsList: FC<Props> = ({comments, level}) => {
         </>
     );
 };
-
-export default CommentsList;

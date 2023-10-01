@@ -1,8 +1,8 @@
-import {FC, useEffect, useState} from "react";
+import {FC} from "react";
 
 import "./commentsHeader.css";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "src/store";
+import {useSelector} from "react-redux";
+import {RootState} from "src/store";
 import {HeartEmpty} from "../../assets/icons/HeartEmpty";
 export const CommentsHeader: FC = () => {
     const {comments, general} = useSelector(
@@ -16,7 +16,7 @@ export const CommentsHeader: FC = () => {
                     <p className="bold-text">
                         {general.commentsCount} комментариев
                     </p>
-                    <div className="likes-info">
+                    <div className="comments-header-container__likes-info">
                         <HeartEmpty />
                         <p className="bold-text-nums">{general.likesCount}</p>
                     </div>

@@ -15,3 +15,12 @@ export interface IPagination<T> {
     };
     data: T;
 }
+export interface ICommentSlice {
+    comments: any[] | [];
+    commentsLoadingStatus: TLoadingStatus;
+    authors: any;
+    authorsLoadingStatus: TLoadingStatus;
+    general: {commentsCount: number; likesCount: number} | null;
+    generalLoadingStatus: TLoadingStatus;
+}
+type TLoadingStatus = "idle" | "loading" | "error";
