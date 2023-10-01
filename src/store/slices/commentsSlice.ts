@@ -1,4 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import axios, {AxiosError} from "axios";
 import {add} from "date-fns";
 import getAuthorsRequest from "src/api/authors/getAuthorsRequest";
 import getCommentsRequest from "src/api/comments/getCommentsRequest";
@@ -22,6 +23,29 @@ const initialState: ICommentSlice = {
 interface Props {
     page: number;
 }
+
+type OriginalRequest =
+    | (AxiosError["config"] & {
+          _retry?: boolean;
+      })
+    | undefined;
+
+axios.interceptors.response.use(
+    function (response) {
+        return response;
+    },
+    async function (error: AxiosError) {
+        const originalRequest: OriginalRequest = error.config;
+        if (error && !originalRequest._retry) {
+            originalRequest._retry = true;
+            const newRes = await axios.request(error.config);
+            return newRes;
+        } else {
+            return Promise.reject(error);
+        }
+    },
+);
+
 export const fetchComments = createAsyncThunk(
     "comments/fetchComments",
     async ({page}: Props) => {

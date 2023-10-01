@@ -28,9 +28,7 @@ export const ListWrapper = () => {
 
     useEffect(() => {
         setTransformedComments(transformCommentsData(comments));
-        console.log(comments);
     }, [comments]);
-    console.log(transformComments);
     const handleButtonClick = () => {
         setCurrentPage((state) => state + 1);
     };

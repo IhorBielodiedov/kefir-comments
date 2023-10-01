@@ -27,7 +27,7 @@ body {
         "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-size: 100% 100%;
+    background-size: 100% auto;
     background-repeat: no-repeat;
     background-position: center top;
     background-attachment: fixed;
@@ -58,6 +58,11 @@ code {
     font-style: normal;
     font-weight: 700;
     line-height: 150%; /* 22.5px */
+}
+@media (max-width: 900px) {
+    body {
+        background-size: auto 100%;
+    }
 }
 @media (max-width: 600px) {
     .bold-text {
