@@ -1,33 +1,13 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import axios, {AxiosError} from "axios";
 import getAuthorsRequest from "src/api/authors/getAuthorsRequest";
 import getCommentsRequest from "src/api/comments/getCommentsRequest";
 import {ICommentSlice} from "src/types/commentsTypes";
+import "../../lib/axios";
 
 interface Props {
     page: number;
 }
-type OriginalRequest =
-    | (AxiosError["config"] & {
-          _retry?: boolean;
-      })
-    | undefined;
 
-axios.interceptors.response.use(
-    function (response) {
-        return response;
-    },
-    async function (error: AxiosError) {
-        const originalRequest: OriginalRequest = error.config;
-        if (error && !originalRequest._retry) {
-            originalRequest._retry = true;
-            const newRes = await axios.request(error.config);
-            return newRes;
-        } else {
-            throw error;
-        }
-    },
-);
 const initialState: ICommentSlice = {
     comments: [],
     commentsLoadingStatus: "loading",
