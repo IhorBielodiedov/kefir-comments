@@ -100,7 +100,9 @@ export const Comment: FC<Props> = ({comment, level}) => {
                                 </button>
                             </div>
                             <div className="comment-container__text">
-                                {comment.text}
+                                <p className="comment-container__text-base">
+                                    {comment.text}
+                                </p>
                             </div>
                         </div>
                     </div>
