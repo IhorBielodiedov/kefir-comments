@@ -9,6 +9,7 @@ import {getMargin} from "src/lib/helpers";
 import {IAuthor} from "src/types/authorsTypes";
 import {Heart, HeartFilled} from "src/assets/icons";
 import {setLikes} from "src/store/slices/generalSlice";
+import {useMediaQuery} from "src/lib/hooks";
 
 interface Props {
     comment: IComment;
@@ -22,7 +23,7 @@ export const Comment: FC<Props> = ({comment, level}) => {
     const dispatch = useDispatch();
 
     // Определение ширины экрана для мобильных устройств
-    const isMobile = window.screen.width < 600;
+    const isMobile = useMediaQuery("(max-width: 600px)");
 
     // Определение отступа слева для комментария на основе уровня вложенности
     const marginLeft = getMargin(isMobile, level);
@@ -60,7 +61,7 @@ export const Comment: FC<Props> = ({comment, level}) => {
                 }),
             );
     }, [authors]);
-    console.log(comment.id);
+
     return (
         <>
             {authorInfo && (

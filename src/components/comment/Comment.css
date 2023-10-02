@@ -14,7 +14,7 @@
     width: 100%;
 }
 .comment-container__content {
-    width: 100%;
+    width: calc(100% - 60px);
     display: flex;
     flex-direction: column;
 }
@@ -22,10 +22,7 @@
     width: 100%;
     display: flex;
     min-width: 0;
-}
-.comment-container__text-base {
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-break: break-word;
 }
 
 .comment-container__info {
@@ -88,8 +85,4 @@
         width: 20px;
         height: 20px;
     }
-}
-@media (max-width: 500px) {
-}
-@media (max-width: 400px) {
 }
