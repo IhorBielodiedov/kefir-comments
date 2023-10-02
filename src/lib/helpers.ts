@@ -1,16 +1,17 @@
-import {IComment, IPagination} from "src/types/commentsTypes";
+import {IComment, ICommentRes} from "src/types/commentsTypes";
 
-export function transformCommentsData(data: IComment[]) {
-    const commentsMap: any = {};
-    const commentsTree: any = [];
+export function transformCommentsData(data: ICommentRes[]) {
+    const commentsMap: Record<number, IComment> = {};
+    const commentsTree: IComment[] = [];
 
     // Создаем объекты комментариев и строим карту по id
-    data.forEach((comment: any) => {
+    data.forEach((comment: ICommentRes) => {
         commentsMap[comment.id] = {...comment, children: []};
+        console.log("commentsMap", commentsMap);
     });
 
     // Строим дерево комментариев на основе поля parent
-    data.forEach((comment: any) => {
+    data.forEach((comment: ICommentRes) => {
         if (comment.parent) {
             commentsMap[comment.parent].children.push(commentsMap[comment.id]);
         } else {

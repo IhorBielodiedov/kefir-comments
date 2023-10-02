@@ -1,13 +1,13 @@
 import {FC} from "react";
 
-import "./commentsHeader.css";
+import "./CommentsHeader.css";
 import {useSelector} from "react-redux";
 import {RootState} from "src/store";
-import {HeartEmpty} from "../../assets/icons/HeartEmpty";
+import {HeartEmpty} from "src/assets/icons";
+
 export const CommentsHeader: FC = () => {
-    const {comments, general} = useSelector(
-        (state: RootState) => state.commentsSlice,
-    );
+    const {comments} = useSelector((state: RootState) => state.commentsSlice);
+    const {general} = useSelector((state: RootState) => state.generalSlice);
 
     return (
         <>

@@ -1,3 +1,5 @@
+import {TLoadingStatus} from "./commonTypes";
+
 export interface IComment {
     id: number;
     author: number;
@@ -5,7 +7,15 @@ export interface IComment {
     parent: number | null;
     likes: number;
     created: string;
-    children: IComment[] | [];
+    children: IComment[];
+}
+export interface ICommentRes {
+    id: number;
+    created: string;
+    text: string;
+    author: number;
+    parent: number | null;
+    likes: number;
 }
 export interface IPagination<T> {
     pagination: {
@@ -16,11 +26,6 @@ export interface IPagination<T> {
     data: T;
 }
 export interface ICommentSlice {
-    comments: any[] | [];
+    comments: ICommentRes[];
     commentsLoadingStatus: TLoadingStatus;
-    authors: any;
-    authorsLoadingStatus: TLoadingStatus;
-    general: {commentsCount: number; likesCount: number} | null;
-    generalLoadingStatus: TLoadingStatus;
 }
-type TLoadingStatus = "idle" | "loading" | "error";

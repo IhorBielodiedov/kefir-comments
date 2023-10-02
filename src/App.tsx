@@ -1,7 +1,7 @@
 import {Provider} from "react-redux";
 import store from "./store";
-import {ListWrapper} from "./components/list-wrapper/ListWrapper";
 import "./App.css";
+import {ListWrapper} from "./components/list-wrapper";
 
 function App() {
     return (

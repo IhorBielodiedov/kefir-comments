@@ -1,15 +1,14 @@
-import {FC, useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "src/store";
 import {IComment} from "src/types/commentsTypes";
-import "./comment.css";
+import "./Comment.css";
 import {formatDate} from "src/lib/date";
 
-import {setLikes} from "src/store/slices/commentsSlice";
-import {Heart} from "src/assets/icons/Heart";
-import {HeartFilled} from "src/assets/icons/HeartFilled";
 import {getMargin} from "src/lib/helpers";
 import {IAuthor} from "src/types/authorsTypes";
+import {Heart, HeartFilled} from "src/assets/icons";
+import {setLikes} from "src/store/slices/generalSlice";
 
 interface Props {
     comment: IComment;
@@ -18,9 +17,8 @@ interface Props {
 
 export const Comment: FC<Props> = ({comment, level}) => {
     // Извлечение состояния и действий из Redux
-    const {authors, general} = useSelector(
-        (state: RootState) => state.commentsSlice,
-    );
+    const {general} = useSelector((state: RootState) => state.generalSlice);
+    const {authors} = useSelector((state: RootState) => state.authorsSlice);
     const dispatch = useDispatch();
 
     // Определение ширины экрана для мобильных устройств
@@ -62,7 +60,7 @@ export const Comment: FC<Props> = ({comment, level}) => {
                 }),
             );
     }, [authors]);
-
+    console.log(comment.id);
     return (
         <>
             {authorInfo && (

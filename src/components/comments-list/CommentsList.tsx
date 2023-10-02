@@ -1,7 +1,7 @@
 import {FC} from "react";
-import {Comment} from "../comment/Comment";
 import {IComment} from "src/types/commentsTypes";
-import "./commentList.css";
+import "./CommentList.css";
+import {Comment} from "../comment";
 
 interface Props {
     comments: IComment[]; // Массив комментариев, которые будут отображаться

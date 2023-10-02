@@ -38,32 +38,28 @@ function formatTimeDifference(milliseconds: number) {
     if (days > 0) {
         return "больше 24 часов назад";
     } else if (hours > 0) {
-        return `${hours} ${pluralize(hours, "час", "часа", "часов")} назад`;
+        return `${hours} ${declOfNum(hours, ["час", "часа", "часов"])} назад`;
     } else if (minutes > 0) {
-        return `${minutes} ${pluralize(
-            minutes,
+        return `${minutes} ${minutes} ${declOfNum(minutes, [
             "минуту",
             "минуты",
             "минут",
-        )} назад`;
+        ])}
+        назад`;
     } else if (seconds > 0) {
-        return `${seconds} ${pluralize(
-            seconds,
+        return `${seconds} ${declOfNum(seconds, [
             "секунду",
             "секунды",
             "секунд",
-        )} назад`;
+        ])} назад`;
     } else {
         return "только что";
     }
 }
 
-function pluralize(number: number, single: string, few: string, many: string) {
-    if (number === 1) {
-        return single;
-    } else if (number >= 2 && number <= 4) {
-        return few;
-    } else {
-        return many;
-    }
-}
+export const declOfNum = (number: number, words: string[]) =>
+    words[
+        number % 100 > 4 && number % 100 < 20
+            ? 2
+            : [2, 0, 1, 1, 1, 2][number % 10 < 5 ? Math.abs(number) % 10 : 5]
+    ];
