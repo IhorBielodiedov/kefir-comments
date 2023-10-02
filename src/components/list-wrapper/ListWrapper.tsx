@@ -10,6 +10,7 @@ import {fetchAuthors} from "src/store/slices/authorsSlice";
 import {CommentsList} from "../comments-list";
 import {CommentsHeader} from "../comments-header";
 import {fetchGeneral} from "src/store/slices/generalSlice";
+import Spinner from "../spinner";
 
 export const ListWrapper: FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -28,11 +29,16 @@ export const ListWrapper: FC = () => {
         generalLoadingStatus === "error" ||
         commentsLoadingStatus === "error" ||
         authorsLoadingStatus === "error";
+
+    // Загрузка данных при монтировании компонента
+    useEffect(() => {
+        dispatch(fetchAuthors());
+        dispatch(fetchGeneral());
+    }, []);
+
     // Загрузка данных при монтировании компонента и изменении текущей страницы
     useEffect(() => {
         dispatch(fetchComments({page: currentPage}));
-        dispatch(fetchAuthors());
-        dispatch(fetchGeneral());
     }, [currentPage]);
 
     // Преобразование данных комментариев при изменении комментариев
@@ -55,7 +61,13 @@ export const ListWrapper: FC = () => {
                     </p>
                 </div>
             )}
-
+            {generalLoadingStatus === LoadingStatus.loading && (
+                <div className="error-message">
+                    <p className="error-message__text bold-text">
+                        <Spinner />
+                    </p>
+                </div>
+            )}
             {/* Отображение компонентов после успешной загрузки данных */}
             {general && transformComments && (
                 <div className="list-wrapper">
